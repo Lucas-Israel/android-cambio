@@ -11,12 +11,12 @@ interface ApiService {
 
     @GET("symbols")
     suspend fun getSymbols(
-        @Header("apikey") apikey: String = "3xt1gldWPOEU3tAN7Ox3hrqTmzxxBPuT"
+        @Header("apikey") apikey: String = "djr47TPcZRLylewKnR3XVGrYi8zbmMok"
     ): Response<CurrencySymbolResponse>
 
     @GET("latest")
     suspend fun getLatestRates(
         @Query("base") base: String,
-        @Header("apikey") apikey: String = "3xt1gldWPOEU3tAN7Ox3hrqTmzxxBPuT"
+        @Header("apikey") apikey: String = "djr47TPcZRLylewKnR3XVGrYi8zbmMok"
     ) : Response<CurrencyRateResponse>
 }

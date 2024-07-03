@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private val currMenu: AutoCompleteTextView by lazy { findViewById(R.id.currency_selection_input_layout) }
     private val selCurTexView: MaterialTextView by lazy { findViewById(R.id.select_currency_state) }
     private val currRatesViewer: RecyclerView by lazy { findViewById(R.id.currency_rates_state) }
+    private val mainCurrState: MaterialTextView by lazy { findViewById(R.id.load_currency_state) }
+    private val waitingResp: FrameLayout by lazy { findViewById(R.id.waiting_response_state) }
 
     // init
     @SuppressLint("NotifyDataSetChanged")
@@ -37,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         currMenu.setOnItemClickListener { parent, _view, position, _id ->
             selCurTexView.visibility = View.GONE
             currRatesViewer.visibility = View.VISIBLE
-
+            waitingResp.visibility = View.VISIBLE
+            
             val currTitle = parent.getItemAtPosition(position) as String
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -62,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+            waitingResp.visibility = View.GONE
 
         }
 
@@ -69,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
+        mainCurrState.visibility = View.VISIBLE
         selCurTexView.visibility = View.VISIBLE
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -90,5 +95,6 @@ class MainActivity : AppCompatActivity() {
                 ApiIdlingResource.decrement()
             }
         }
+        mainCurrState.visibility = View.GONE
     }
 }
